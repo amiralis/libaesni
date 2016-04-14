@@ -57,4 +57,29 @@ extern "C"
 #define MYSTDCALL 
 #endif
 
+#ifndef __APPLE__
+#define iEncExpandKey256 _iEncExpandKey256
+#define iEncExpandKey192 _iEncExpandKey192
+#define iEncExpandKey128 _iEncExpandKey128
+#define iDecExpandKey256 _iDecExpandKey256
+#define iDecExpandKey192 _iDecExpandKey192
+#define iDecExpandKey128 _iDecExpandKey128
+#define iEnc128 _iEnc128
+#define iDec128 _iDec128
+#define iEnc256 _iEnc256
+#define iDec256 _iDec256
+#define iEnc192 _iEnc192
+#define iDec192 _iDec192
+#define iEnc128_CBC _iEnc128_CBC
+#define iDec128_CBC _iDec128_CBC
+#define iEnc256_CBC _iEnc256_CBC
+#define iDec256_CBC _iDec256_CBC
+#define iEnc192_CBC _iEnc192_CBC
+#define iDec192_CBC _iDec192_CBC
+#define iEnc128_CTR _iEnc128_CTR
+#define iEnc192_CTR _iEnc192_CTR
+#define iEnc256_CTR _iEnc256_CTR
+#define do_rdtsc    _do_rdtsc
+#endif
+
 
