@@ -57,6 +57,7 @@ extern "C"
 #define MYSTDCALL 
 #endif
 
+
 #ifndef __APPLE__
 #define iEncExpandKey256 _iEncExpandKey256
 #define iEncExpandKey192 _iEncExpandKey192
@@ -81,5 +82,45 @@ extern "C"
 #define iEnc256_CTR _iEnc256_CTR
 #define do_rdtsc    _do_rdtsc
 #endif
+	// prepearing the different key rounds, for enc/dec in asm
+	// expnaded key should be 16-byte aligned
+	// expanded key should have enough space to hold all key rounds (16 bytes per round) - 256 bytes would cover all cases (AES256 has 14 rounds + 1 xor)
+	void MYSTDCALL iEncExpandKey256(_AES_IN UCHAR *key, _AES_OUT UCHAR *expanded_key);
+	void MYSTDCALL iEncExpandKey192(_AES_IN UCHAR *key, _AES_OUT UCHAR *expanded_key);
+	void MYSTDCALL iEncExpandKey128(_AES_IN UCHAR *key, _AES_OUT UCHAR *expanded_key);
+
+	void MYSTDCALL iDecExpandKey256(UCHAR *key, _AES_OUT UCHAR *expanded_key);
+	void MYSTDCALL iDecExpandKey192(UCHAR *key, _AES_OUT UCHAR *expanded_key);
+	void MYSTDCALL iDecExpandKey128(UCHAR *key, _AES_OUT UCHAR *expanded_key);
 
 
+	//enc/dec asm functions
+	void MYSTDCALL iEnc128(sAesData *data);
+	void MYSTDCALL iDec128(sAesData *data);
+	void MYSTDCALL iEnc256(sAesData *data);
+	void MYSTDCALL iDec256(sAesData *data);
+	void MYSTDCALL iEnc192(sAesData *data);
+	void MYSTDCALL iDec192(sAesData *data);
+
+	void MYSTDCALL iEnc128_CBC(sAesData *data);
+	void MYSTDCALL iDec128_CBC(sAesData *data);
+	void MYSTDCALL iEnc256_CBC(sAesData *data);
+	void MYSTDCALL iDec256_CBC(sAesData *data);
+	void MYSTDCALL iEnc192_CBC(sAesData *data);
+	void MYSTDCALL iDec192_CBC(sAesData *data);
+
+
+	void MYSTDCALL iEnc128_CTR(sAesData *data);
+	void MYSTDCALL iEnc256_CTR(sAesData *data);
+	void MYSTDCALL iEnc192_CTR(sAesData *data);
+
+	// rdtsc function
+	unsigned long long do_rdtsc(void);
+
+
+#if (__cplusplus)
+}
+#endif
+
+
+#endif
