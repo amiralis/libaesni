@@ -97,3 +97,104 @@
 
 %endmacro
 
+
+%macro aesenc4 1
+	movdqa	xmm4,%1
+
+	aesenc	xmm0,xmm4
+	aesenc	xmm1,xmm4
+	aesenc	xmm2,xmm4
+	aesenc	xmm3,xmm4
+
+%endmacro
+
+%macro aesenclast4 1
+	movdqa	xmm4,%1
+
+	aesenclast	xmm0,xmm4
+	aesenclast	xmm1,xmm4
+	aesenclast	xmm2,xmm4
+	aesenclast	xmm3,xmm4
+
+%endmacro
+
+
+%macro load_and_inc4 1
+	movdqa	xmm4,%1
+	movdqa	xmm0,xmm5
+	pshufb	xmm0, xmm6 ; byte swap counter back
+	movdqa  xmm1,xmm5
+	paddd	xmm1,[counter_add_one wrt rip]
+	pshufb	xmm1, xmm6 ; byte swap counter back
+	movdqa  xmm2,xmm5
+	paddd	xmm2,[counter_add_two wrt rip]
+	pshufb	xmm2, xmm6 ; byte swap counter back
+	movdqa  xmm3,xmm5
+	paddd	xmm3,[counter_add_three wrt rip]
+	pshufb	xmm3, xmm6 ; byte swap counter back
+	pxor	xmm0,xmm4
+	paddd	xmm5,[counter_add_four wrt rip]
+	pxor	xmm1,xmm4
+	pxor	xmm2,xmm4
+	pxor	xmm3,xmm4
+%endmacro
+
+%macro xor_with_input4 1
+	movdqu xmm4,[%1]
+	pxor xmm0,xmm4
+	movdqu xmm4,[%1+16]
+	pxor xmm1,xmm4
+	movdqu xmm4,[%1+32]
+	pxor xmm2,xmm4
+	movdqu xmm4,[%1+48]
+	pxor xmm3,xmm4
+%endmacro
+
+
+
+%macro load_and_xor4 2
+	movdqa	xmm4,%2
+	movdqu	xmm0,[%1 + 0*16]
+	pxor	xmm0,xmm4
+	movdqu	xmm1,[%1 + 1*16]
+	pxor	xmm1,xmm4
+	movdqu	xmm2,[%1 + 2*16]
+	pxor	xmm2,xmm4
+	movdqu	xmm3,[%1 + 3*16]
+	pxor	xmm3,xmm4
+%endmacro
+
+%macro store4 1
+	movdqu [%1 + 0*16],xmm0
+	movdqu [%1 + 1*16],xmm1
+	movdqu [%1 + 2*16],xmm2
+	movdqu [%1 + 3*16],xmm3
+%endmacro
+
+%macro copy_round_keys 3
+	movdqu xmm4,[%2 + ((%3)*16)]
+	movdqa [%1 + ((%3)*16)],xmm4
+%endmacro
+
+
+%macro key_expansion_1_192 1
+		;; Assumes the xmm3 includes all zeros at this point. 
+        pshufd xmm2, xmm2, 11111111b        
+        shufps xmm3, xmm1, 00010000b        
+        pxor xmm1, xmm3        
+        shufps xmm3, xmm1, 10001100b
+        pxor xmm1, xmm3        
+		pxor xmm1, xmm2		
+		movdqu [rdx+%1], xmm1			
+%endmacro
+
+; Calculate w10 and w11 using calculated w9 and known w4-w5
+%macro key_expansion_2_192 1				
+		movdqa xmm5, xmm4
+		pslldq xmm5, 4
+		shufps xmm6, xmm1, 11110000b
+		pxor xmm6, xmm5
+		pxor xmm4, xmm6
+		pshufd xmm7, xmm4, 00001110b 
+		movdqu [rdx+%1], xmm7
+%endmacro
