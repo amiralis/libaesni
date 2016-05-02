@@ -126,4 +126,18 @@ void intel_AES_enc128(UCHAR *plainText,UCHAR *cipherText,UCHAR *key,size_t numBl
 	iEnc128(&aesData);
 }
 
+void intel_AES_enc128_CBC(UCHAR *plainText,UCHAR *cipherText,UCHAR *key,size_t numBlocks,UCHAR *iv)
+{
+	DEFINE_ROUND_KEYS
+	sAesData aesData;
+	aesData.in_block = plainText;
+	aesData.out_block = cipherText;
+	aesData.expanded_key = expandedKey;
+	aesData.num_blocks = numBlocks;
+	aesData.iv = iv;
+
+	iEncExpandKey128(key,expandedKey);
+	iEnc128_CBC(&aesData);
+}
+
 
