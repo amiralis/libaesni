@@ -113,3 +113,17 @@ int check_for_aes_instructions()
 	return no;
 }
 
+void intel_AES_enc128(UCHAR *plainText,UCHAR *cipherText,UCHAR *key,size_t numBlocks)
+{
+	DEFINE_ROUND_KEYS
+	sAesData aesData;
+	aesData.in_block = plainText;
+	aesData.out_block = cipherText;
+	aesData.expanded_key = expandedKey;
+	aesData.num_blocks = numBlocks;
+
+	iEncExpandKey128(key,expandedKey);
+	iEnc128(&aesData);
+}
+
+
