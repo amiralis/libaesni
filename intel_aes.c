@@ -283,3 +283,47 @@ void intel_AES_dec256_CBC(UCHAR *cipherText,UCHAR *plainText,UCHAR *key,size_t n
 	iDec256_CBC(&aesData);
 }
 
+void intel_AES_encdec256_CTR(UCHAR *in,UCHAR *out,UCHAR *key,size_t numBlocks,UCHAR *ic)
+{
+	DEFINE_ROUND_KEYS
+	sAesData aesData;
+	aesData.in_block = in;
+	aesData.out_block = out;
+	aesData.expanded_key = expandedKey;
+	aesData.num_blocks = numBlocks;
+	aesData.iv = ic;
+
+	iEncExpandKey256(key,expandedKey);
+	iEnc256_CTR(&aesData);
+}
+
+
+void intel_AES_encdec192_CTR(UCHAR *in,UCHAR *out,UCHAR *key,size_t numBlocks,UCHAR *ic)
+{
+	DEFINE_ROUND_KEYS
+	sAesData aesData;
+	aesData.in_block = in;
+	aesData.out_block = out;
+	aesData.expanded_key = expandedKey;
+	aesData.num_blocks = numBlocks;
+	aesData.iv = ic;
+
+	iEncExpandKey192(key,expandedKey);
+	iEnc192_CTR(&aesData);
+}
+
+
+void intel_AES_encdec128_CTR(UCHAR *in,UCHAR *out,UCHAR *key,size_t numBlocks,UCHAR *ic)
+{
+	DEFINE_ROUND_KEYS
+	sAesData aesData;
+	aesData.in_block = in;
+	aesData.out_block = out;
+	aesData.expanded_key = expandedKey;
+	aesData.num_blocks = numBlocks;
+	aesData.iv = ic;
+
+	iEncExpandKey128(key,expandedKey);
+	iEnc128_CTR(&aesData);
+}
+
