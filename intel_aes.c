@@ -198,3 +198,88 @@ void intel_AES_enc256_CBC(UCHAR *plainText,UCHAR *cipherText,UCHAR *key,size_t n
 	iEnc256_CBC(&aesData);
 }
 
+void intel_AES_dec128(UCHAR *cipherText,UCHAR *plainText,UCHAR *key,size_t numBlocks)
+{
+	DEFINE_ROUND_KEYS
+	sAesData aesData;
+	aesData.in_block = cipherText;
+	aesData.out_block = plainText;
+	aesData.expanded_key = expandedKey;
+	aesData.num_blocks = numBlocks;
+
+	iDecExpandKey128(key,expandedKey);
+	iDec128(&aesData);
+}
+
+void intel_AES_dec128_CBC(UCHAR *cipherText,UCHAR *plainText,UCHAR *key,size_t numBlocks,UCHAR *iv)
+{
+	DEFINE_ROUND_KEYS
+	sAesData aesData;
+	aesData.in_block = cipherText;
+	aesData.out_block = plainText;
+	aesData.expanded_key = expandedKey;
+	aesData.num_blocks = numBlocks;
+	aesData.iv = iv;
+
+	iDecExpandKey128(key,expandedKey);
+	iDec128_CBC(&aesData);
+}
+
+
+void intel_AES_dec192(UCHAR *cipherText,UCHAR *plainText,UCHAR *key,size_t numBlocks)
+{
+	DEFINE_ROUND_KEYS
+	sAesData aesData;
+	aesData.in_block = cipherText;
+	aesData.out_block = plainText;
+	aesData.expanded_key = expandedKey;
+	aesData.num_blocks = numBlocks;
+
+	iDecExpandKey192(key,expandedKey);
+	iDec192(&aesData);
+}
+
+
+void intel_AES_dec192_CBC(UCHAR *cipherText,UCHAR *plainText,UCHAR *key,size_t numBlocks,UCHAR *iv)
+{
+	DEFINE_ROUND_KEYS
+	sAesData aesData;
+	aesData.in_block = cipherText;
+	aesData.out_block = plainText;
+	aesData.expanded_key = expandedKey;
+	aesData.num_blocks = numBlocks;
+	aesData.iv = iv;
+
+	iDecExpandKey192(key,expandedKey);
+	iDec192_CBC(&aesData);
+}
+
+
+void intel_AES_dec256(UCHAR *cipherText,UCHAR *plainText,UCHAR *key,size_t numBlocks)
+{
+	DEFINE_ROUND_KEYS
+	sAesData aesData;
+	aesData.in_block = cipherText;
+	aesData.out_block = plainText;
+	aesData.expanded_key = expandedKey;
+	aesData.num_blocks = numBlocks;
+
+	iDecExpandKey256(key,expandedKey);
+	iDec256(&aesData);
+}
+
+
+void intel_AES_dec256_CBC(UCHAR *cipherText,UCHAR *plainText,UCHAR *key,size_t numBlocks,UCHAR *iv)
+{
+	DEFINE_ROUND_KEYS
+	sAesData aesData;
+	aesData.in_block = cipherText;
+	aesData.out_block = plainText;
+	aesData.expanded_key = expandedKey;
+	aesData.num_blocks = numBlocks;
+	aesData.iv = iv;
+
+	iDecExpandKey256(key,expandedKey);
+	iDec256_CBC(&aesData);
+}
+
