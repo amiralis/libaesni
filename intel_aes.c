@@ -327,3 +327,53 @@ void intel_AES_encdec128_CTR(UCHAR *in,UCHAR *out,UCHAR *key,size_t numBlocks,UC
 	iEnc128_CTR(&aesData);
 }
 
+
+int enc_128_CBC(unsigned char *pt, unsigned char *ct, unsigned char *key, unsigned char *iv, int numBlocks)
+{
+	unsigned int buffer_size =  numBlocks * BLOCK_SIZE;
+	unsigned int i;
+
+	UCHAR _key[AES_128_KEYSIZE];
+	UCHAR _iv[BLOCK_SIZE];
+	UCHAR *plaintext = (UCHAR*)_alloca(buffer_size);
+
+	for (i=0;i<BLOCK_SIZE;i++)
+	{
+		_key[i] = key[i];
+		_iv[i] = iv[i];
+	}
+
+	for (i=0;i<buffer_size;i++)
+	{
+		plaintext[i] = pt[i];
+	}
+
+	intel_AES_enc128_CBC(plaintext, ct, _key, numBlocks, _iv);
+	return 0;
+}
+
+
+int dec_128_CBC(unsigned char *ct, unsigned char *pt, unsigned char *key, unsigned char *iv, int numBlocks){
+	
+	unsigned int buffer_size =  numBlocks * BLOCK_SIZE;
+	unsigned int i;
+	
+	UCHAR _key[AES_128_KEYSIZE];
+	UCHAR _iv[BLOCK_SIZE];
+	UCHAR *ciphertext = (UCHAR*)_alloca(buffer_size);
+	
+	for (i=0;i<BLOCK_SIZE;i++)
+	{
+		_key[i] = key[i];
+		_iv[i] = iv[i];
+	}
+
+	for (i=0;i<buffer_size;i++)
+	{
+		ciphertext[i] = ct[i];
+	}
+
+  	intel_AES_dec128_CBC(ciphertext, pt, _key, numBlocks, _iv);
+	return 0;
+}
+
