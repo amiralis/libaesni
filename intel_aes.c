@@ -544,3 +544,62 @@ int dec_128_CTR(unsigned char *ct, unsigned char *pt, unsigned char *key, unsign
 	return 0;
 }
 
+int enc_192_CTR(unsigned char *pt, unsigned char *ct, unsigned char *key, unsigned char *ic, int numBlocks)
+{
+	unsigned int buffer_size = numBlocks*BLOCK_SIZE;
+	unsigned int i;
+
+	UCHAR _key[AES_192_KEYSIZE];
+	UCHAR _ic[BLOCK_SIZE];
+	UCHAR *plaintext = (UCHAR*)_alloca(buffer_size);
+
+	for (i=0;i<BLOCK_SIZE;i++)
+	{
+		_ic[i] = ic[i];
+	}
+
+	for (i=0;i<AES_192_KEYSIZE;i++)
+	{
+		_key[i] = key[i];
+	}
+
+	for (i=0;i<buffer_size;i++)
+	{
+		plaintext[i] = pt[i];
+	}
+
+	intel_AES_encdec192_CTR(plaintext, ct, _key, numBlocks, _ic);
+
+	return 0;
+}
+
+int dec_192_CTR(unsigned char *ct, unsigned char *pt, unsigned char *key, unsigned char *ic, int numBlocks)
+{
+	unsigned int buffer_size = numBlocks*BLOCK_SIZE;
+	unsigned int i;
+
+	UCHAR _key[AES_192_KEYSIZE];
+	UCHAR _ic[BLOCK_SIZE];
+	UCHAR *ciphertext = (UCHAR*)_alloca(buffer_size);
+
+	for (i=0;i<BLOCK_SIZE;i++)
+	{
+		_key[i] = key[i];
+		_ic[i] = ic[i];
+	}
+
+	for (i=0;i<AES_192_KEYSIZE;i++)
+	{
+		_key[i] = key[i];
+	}
+
+	for (i=0;i<buffer_size;i++)
+	{
+		ciphertext[i] = ct[i];
+	}
+
+	intel_AES_encdec192_CTR(ciphertext, pt, _key, numBlocks, _ic);
+
+	return 0;
+}
+
