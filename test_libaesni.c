@@ -33,12 +33,52 @@ unsigned char test_cipher_256_cbc[64]={ 0xf5,0x8c,0x4c,0x04,0xd6,0xe5,0xf1,0xba,
 										0x39,0xf2,0x33,0x69,0xa9,0xd9,0xba,0xcf,0xa5,0x30,0xe2,0x63,0x04,0x23,0x14,0x61,
 										0xb2,0xeb,0x05,0xe2,0xc3,0x9b,0xe9,0xfc,0xda,0x6c,0x19,0x07,0x8c,0x6a,0x9d,0x1b};
 
+void test_cbc_256(){
+	unsigned int buffer_size = 64;
+	int nbocks = 4;
+	unsigned int i;
+	unsigned char *testVector = (unsigned char*)_alloca(buffer_size);
+	unsigned char *testResult = (unsigned char*)_alloca(buffer_size);
+	unsigned char test_iv[16];
+
+	for (i=0;i<buffer_size;i++)
+	{
+		testVector[i] = test_plain_text[i];
+		testResult[i] = 0xee;
+	}
+
+	memcpy(test_iv, test_init_vector, 16);
+
+	intel_AES_enc256_CBC(testVector, testResult, test_key_256, nbocks, test_iv);
+
+	for (i=0;i<buffer_size;i++)
+	{
+		if (testResult[i] != test_cipher_256_cbc[i])
+		{	
+			printf("AES-CBC-256 Encryption Failed\n");
+		}
+	}
+	
+	memcpy(test_iv,test_init_vector,16);
+	intel_AES_dec256_CBC(testResult,testVector,test_key_256, nbocks, test_iv);
+
+	for (i=0;i<buffer_size;i++)
+	{
+		if (testVector[i] != test_plain_text[i])
+		{
+			printf("AES-CBC-256 Decryption Failed\n");
+		}
+	}
+
+	printf("AES-CBC-256 Successful\n");
+}
 
 int main(){
 	
 	int AES_ENABLED = check_for_aes_instructions();
 	if (AES_ENABLED == 1){
 		printf ("The CPU supports AES-NI\n");
+		test_cbc_256();
 	}
 	else{
 		printf ("The CPU seems to not support AES-NI\n");
