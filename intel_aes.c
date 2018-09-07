@@ -628,7 +628,7 @@ int enc_256_CTR(unsigned char *pt, unsigned char *ct, unsigned char *key, unsign
 		plaintext[i] = pt[i];
 	}
 
-	intel_AES_encdec128_CTR(plaintext, ct, _key, numBlocks, _ic);
+	intel_AES_encdec256_CTR(plaintext, ct, _key, numBlocks, _ic);
 
 	return 0;
 }
@@ -657,7 +657,7 @@ int dec_256_CTR(unsigned char *ct, unsigned char *pt, unsigned char *key, unsign
 		ciphertext[i] = ct[i];
 	}
 
-	intel_AES_encdec128_CTR(ciphertext, pt, _key, numBlocks, _ic);
+	intel_AES_encdec256_CTR(ciphertext, pt, _key, numBlocks, _ic);
 
 	return 0;
 }
