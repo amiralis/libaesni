@@ -48,9 +48,11 @@ void test_cbc_256(){
 	}
 
 	memcpy(test_iv, test_init_vector, 16);
-
-	intel_AES_enc256_CBC(testVector, testResult, test_key_256, nbocks, test_iv);
-
+	
+	printf("IV value before the call:%s\n", test_iv);
+	enc_256_CBC(testVector, testResult, test_key_256, test_iv, nbocks);
+	printf("IV value after the call: %s\n", test_iv);
+	
 	for (i=0;i<buffer_size;i++)
 	{
 		if (testResult[i] != test_cipher_256_cbc[i])
@@ -60,7 +62,7 @@ void test_cbc_256(){
 	}
 	
 	memcpy(test_iv,test_init_vector,16);
-	intel_AES_dec256_CBC(testResult,testVector,test_key_256, nbocks, test_iv);
+	dec_256_CBC(testResult,testVector,test_key_256, test_iv, nbocks);
 
 	for (i=0;i<buffer_size;i++)
 	{
